@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sen.onlineexam.dao.ExamDAO">
+  <resultMap id="BaseResultMap" type="com.sen.onlineexam.pojo.Exam">
+    <id column="exam_id" jdbcType="INTEGER" property="examId" />
+    <result column="exam_name" jdbcType="VARCHAR" property="examName" />
+    <result column="exam_sdate" jdbcType="TIMESTAMP" property="examSdate" />
+    <result column="exam_edate" jdbcType="TIMESTAMP" property="examEdate" />
+    <result column="exam_cdate" jdbcType="TIMESTAMP" property="examCdate" />
+    <result column="exam_long" jdbcType="INTEGER" property="examLong" />
+    <result column="exam_totalscore" jdbcType="INTEGER" property="examTotalscore" />
+    <result column="exam_totalnum" jdbcType="INTEGER" property="examTotalnum" />
+    <association property="user" javaType="com.sen.onlineexam.pojo.User" column="user_id"
+                 select="com.sen.onlineexam.dao.UserDAO.selectByPrimaryKey"/>
+    <association property="subject" javaType="com.sen.onlineexam.pojo.Subject" column="subject_id"
+                 select="com.sen.onlineexam.dao.SubjectDAO.selectByPrimaryKey"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    exam_id, exam_name, exam_sdate, exam_edate, exam_cdate, exam_long, exam_totalscore, 
+    exam_totalnum, subject_id, user_id
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oe_exam
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllExam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from oe_exam
+    <where>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from oe_exam
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="exam_id" keyProperty="examId" parameterType="com.sen.onlineexam.pojo.Exam" useGeneratedKeys="true">
+    insert into oe_exam (exam_name, exam_sdate, exam_edate, 
+      exam_cdate, exam_long, exam_totalscore, 
+      exam_totalnum, subject_id, user_id
+      )
+    values (#{examName,jdbcType=VARCHAR}, #{examSdate,jdbcType=TIMESTAMP}, #{examEdate,jdbcType=TIMESTAMP}, 
+      #{examCdate,jdbcType=TIMESTAMP}, #{examLong,jdbcType=INTEGER}, #{examTotalscore,jdbcType=INTEGER}, 
+      #{examTotalnum,jdbcType=INTEGER}, #{subject.subjectId,jdbcType=INTEGER}, #{user.userId,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <insert id="insertSelective" keyColumn="exam_id" keyProperty="examId" parameterType="com.sen.onlineexam.pojo.Exam" useGeneratedKeys="true">
+    insert into oe_exam
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="examName != null">
+        exam_name,
+      </if>
+      <if test="examSdate != null">
+        exam_sdate,
+      </if>
+      <if test="examEdate != null">
+        exam_edate,
+      </if>
+      <if test="examCdate != null">
+        exam_cdate,
+      </if>
+      <if test="examLong != null">
+        exam_long,
+      </if>
+      <if test="examTotalscore != null">
+        exam_totalscore,
+      </if>
+      <if test="examTotalnum != null">
+        exam_totalnum,
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        subject_id,
+      </if>
+      <if test="user != null and user.userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="examName != null">
+        #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="examSdate != null">
+        #{examSdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examEdate != null">
+        #{examEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examCdate != null">
+        #{examCdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examLong != null">
+        #{examLong,jdbcType=INTEGER},
+      </if>
+      <if test="examTotalscore != null">
+        #{examTotalscore,jdbcType=INTEGER},
+      </if>
+      <if test="examTotalnum != null">
+        #{examTotalnum,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        #{subject.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="user != null and user.userId != null">
+        #{user.userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.sen.onlineexam.pojo.Exam">
+    update oe_exam
+    <set>
+      <if test="examName != null">
+        exam_name = #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="examSdate != null">
+        exam_sdate = #{examSdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examEdate != null">
+        exam_edate = #{examEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examCdate != null">
+        exam_cdate = #{examCdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examLong != null">
+        exam_long = #{examLong,jdbcType=INTEGER},
+      </if>
+      <if test="examTotalscore != null">
+        exam_totalscore = #{examTotalscore,jdbcType=INTEGER},
+      </if>
+      <if test="examTotalnum != null">
+        exam_totalnum = #{examTotalnum,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        subject_id = #{subject.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="user != null and user.userId != null">
+        user_id = #{user.userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sen.onlineexam.pojo.Exam">
+    update oe_exam
+    set exam_name = #{examName,jdbcType=VARCHAR},
+      exam_sdate = #{examSdate,jdbcType=TIMESTAMP},
+      exam_edate = #{examEdate,jdbcType=TIMESTAMP},
+      exam_cdate = #{examCdate,jdbcType=TIMESTAMP},
+      exam_long = #{examLong,jdbcType=INTEGER},
+      exam_totalscore = #{examTotalscore,jdbcType=INTEGER},
+      exam_totalnum = #{examTotalnum,jdbcType=INTEGER},
+      subject_id = #{subject.subjectId,jdbcType=INTEGER},
+      user_id = #{user.userId,jdbcType=INTEGER}
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+</mapper>

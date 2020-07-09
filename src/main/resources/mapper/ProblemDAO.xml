@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sen.onlineexam.dao.ProblemDAO">
+  <resultMap id="BaseResultMap" type="com.sen.onlineexam.pojo.Problem">
+    <id column="problem_id" jdbcType="INTEGER" property="problemId" />
+    <result column="problem_desc" jdbcType="VARCHAR" property="problemDesc" />
+    <result column="problem_right" jdbcType="VARCHAR" property="problemRight" />
+    <result column="problem_count" jdbcType="INTEGER" property="problemCount" />
+    <result column="problem_option1" jdbcType="VARCHAR" property="problemOption1" />
+    <result column="problem_option2" jdbcType="VARCHAR" property="problemOption2" />
+    <result column="problem_option3" jdbcType="VARCHAR" property="problemOption3" />
+    <result column="problem_option4" jdbcType="VARCHAR" property="problemOption4" />
+    <association property="subject" javaType="com.sen.onlineexam.pojo.Subject" column="subject_id"
+                 select="com.sen.onlineexam.dao.SubjectDAO.selectByPrimaryKey"/>
+    <association property="protype" javaType="com.sen.onlineexam.pojo.Protype" column="protype_id"
+                 select="com.sen.onlineexam.dao.ProtypeDAO.selectByPrimaryKey"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    problem_id, problem_desc, problem_right, problem_count, problem_option1, problem_option2, 
+    problem_option3, problem_option4, subject_id, protype_id
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oe_problem
+    where problem_id = #{problemId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllProblemOrName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from oe_problem
+    <where>
+      <if test="problemName != null">
+        problem_desc like CONCAT(CONCAT('%', #{problemName,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="subjectId != null">
+        and subject_id = #{subjectId,jdbcType=INTEGER}
+      </if>
+      <if test="protypeId != null">
+        and protype_id = #{protypeId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from oe_problem
+    where problem_id = #{problemId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="problem_id" keyProperty="problemId" parameterType="com.sen.onlineexam.pojo.Problem" useGeneratedKeys="true">
+    insert into oe_problem (problem_desc, problem_right, problem_count, 
+      problem_option1, problem_option2, problem_option3, 
+      problem_option4, subject_id, protype_id
+      )
+    values (#{problemDesc,jdbcType=VARCHAR}, #{problemRight,jdbcType=VARCHAR}, #{problemCount,jdbcType=INTEGER}, 
+      #{problemOption1,jdbcType=VARCHAR}, #{problemOption2,jdbcType=VARCHAR}, #{problemOption3,jdbcType=VARCHAR}, 
+      #{problemOption4,jdbcType=VARCHAR}, #{subject.subjectId,jdbcType=INTEGER}, #{protype.protypeId,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <insert id="insertSelective" keyColumn="problem_id" keyProperty="problemId" parameterType="com.sen.onlineexam.pojo.Problem" useGeneratedKeys="true">
+    insert into oe_problem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="problemDesc != null">
+        problem_desc,
+      </if>
+      <if test="problemRight != null">
+        problem_right,
+      </if>
+      <if test="problemCount != null">
+        problem_count,
+      </if>
+      <if test="problemOption1 != null">
+        problem_option1,
+      </if>
+      <if test="problemOption2 != null">
+        problem_option2,
+      </if>
+      <if test="problemOption3 != null">
+        problem_option3,
+      </if>
+      <if test="problemOption4 != null">
+        problem_option4,
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        subject_id,
+      </if>
+      <if test="protype != null and protype.protypeId != null">
+        protype_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="problemDesc != null">
+        #{problemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="problemRight != null">
+        #{problemRight,jdbcType=VARCHAR},
+      </if>
+      <if test="problemCount != null">
+        #{problemCount,jdbcType=INTEGER},
+      </if>
+      <if test="problemOption1 != null">
+        #{problemOption1,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption2 != null">
+        #{problemOption2,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption3 != null">
+        #{problemOption3,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption4 != null">
+        #{problemOption4,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        #{subject.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="protype != null and protype.protypeId != null">
+        #{protype.protypeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.sen.onlineexam.pojo.Problem">
+    update oe_problem
+    <set>
+      <if test="problemDesc != null">
+        problem_desc = #{problemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="problemRight != null">
+        problem_right = #{problemRight,jdbcType=VARCHAR},
+      </if>
+      <if test="problemCount != null">
+        problem_count = #{problemCount,jdbcType=INTEGER},
+      </if>
+      <if test="problemOption1 != null">
+        problem_option1 = #{problemOption1,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption2 != null">
+        problem_option2 = #{problemOption2,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption3 != null">
+        problem_option3 = #{problemOption3,jdbcType=VARCHAR},
+      </if>
+      <if test="problemOption4 != null">
+        problem_option4 = #{problemOption4,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null and subject.subjectId != null">
+        subject_id = #{subject.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="protype != null and protype.protypeId != null">
+        protype_id = #{protype.protypeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where problem_id = #{problemId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sen.onlineexam.pojo.Problem">
+    update oe_problem
+    set problem_desc = #{problemDesc,jdbcType=VARCHAR},
+      problem_right = #{problemRight,jdbcType=VARCHAR},
+      problem_count = #{problemCount,jdbcType=INTEGER},
+      problem_option1 = #{problemOption1,jdbcType=VARCHAR},
+      problem_option2 = #{problemOption2,jdbcType=VARCHAR},
+      problem_option3 = #{problemOption3,jdbcType=VARCHAR},
+      problem_option4 = #{problemOption4,jdbcType=VARCHAR},
+      subject_id = #{subject.subjectId,jdbcType=INTEGER},
+      protype_id = #{protype.protypeId,jdbcType=INTEGER}
+    where problem_id = #{problemId,jdbcType=INTEGER}
+  </update>
+</mapper>

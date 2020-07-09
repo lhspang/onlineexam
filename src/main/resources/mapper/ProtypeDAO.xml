@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sen.onlineexam.dao.ProtypeDAO">
+  <resultMap id="BaseResultMap" type="com.sen.onlineexam.pojo.Protype">
+    <id column="protype_id" jdbcType="INTEGER" property="protypeId" />
+    <result column="protype_name" jdbcType="VARCHAR" property="protypeName" />
+    <result column="protype_keynum" jdbcType="INTEGER" property="protypeKeynum" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    protype_id, protype_name, protype_keynum
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oe_protype
+    where protype_id = #{protypeId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from oe_protype
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from oe_protype
+    where protype_id = #{protypeId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="protype_id" keyProperty="protypeId" parameterType="com.sen.onlineexam.pojo.Protype" useGeneratedKeys="true">
+    insert into oe_protype (protype_name, protype_keynum)
+    values (#{protypeName,jdbcType=VARCHAR}, #{protypeKeynum,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="protype_id" keyProperty="protypeId" parameterType="com.sen.onlineexam.pojo.Protype" useGeneratedKeys="true">
+    insert into oe_protype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="protypeName != null">
+        protype_name,
+      </if>
+      <if test="protypeKeynum != null">
+        protype_keynum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="protypeName != null">
+        #{protypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="protypeKeynum != null">
+        #{protypeKeynum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.sen.onlineexam.pojo.Protype">
+    update oe_protype
+    <set>
+      <if test="protypeName != null">
+        protype_name = #{protypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="protypeKeynum != null">
+        protype_keynum = #{protypeKeynum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where protype_id = #{protypeId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sen.onlineexam.pojo.Protype">
+    update oe_protype
+    set protype_name = #{protypeName,jdbcType=VARCHAR},
+      protype_keynum = #{protypeKeynum,jdbcType=INTEGER}
+    where protype_id = #{protypeId,jdbcType=INTEGER}
+  </update>
+</mapper>

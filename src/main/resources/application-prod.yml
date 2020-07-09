@@ -1,0 +1,43 @@
+server:
+  port: 8083
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/onlineexam?useuseUnicode=true&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: onlineexam
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 8
+      min-idle: 1
+      max-active: 10
+      max-wait: 60000
+  devtools:
+    restart:
+      enabled: true
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sen.onlineexam.pojo
+#  config-location: classpath:mybatis/mybatis-config.xml
+
+#pagehelper分页插件配置 以下属性不加也可以实现分页功能
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+debug: true
+
+logging.level.org.springframework.boot.autoconfigure: ERROR
+logging.level.com.sen: debug
+
+

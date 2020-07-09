@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sen.onlineexam.dao.UserAuthDAO">
+  <resultMap id="BaseResultMap" type="com.sen.onlineexam.pojo.UserAuth">
+    <id column="auth_id" jdbcType="INTEGER" property="authId" />
+    <result column="identity_type" jdbcType="VARCHAR" property="identityType" />
+    <result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="credential" jdbcType="VARCHAR" property="credential" />
+    <result column="salt" jdbcType="VARCHAR" property="salt"/>
+    <association property="user" javaType="com.sen.onlineexam.pojo.User" column="user_id"
+                 select="com.sen.onlineexam.dao.UserDAO.selectByPrimaryKey"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    auth_id, identity_type, identifier, credential, salt , user_id
+  </sql>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oe_user_auth
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByIdentifier" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from oe_user_auth
+    where identifier = #{account}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from oe_user_auth
+    where auth_id = #{authId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="auth_id" keyProperty="authId" parameterType="java.util.ArrayList" useGeneratedKeys="true">
+    insert into oe_user_auth (identity_type, identifier, credential,salt, user_id)
+    values
+    <foreach collection="list" index="index" separator="," item="item">
+      (#{item.identityType,jdbcType=VARCHAR}, #{item.identifier,jdbcType=VARCHAR}, #{item.credential,jdbcType=VARCHAR},
+      #{item.salt,jdbcType=VARCHAR},#{item.user.userId,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+
+  <update id="updatePassByUserId" parameterType="com.sen.onlineexam.pojo.UserAuth">
+    update oe_user_auth
+    <set>
+      <if test="credential!=null">
+        credential = #{credential,jdbcType=VARCHAR},
+      </if>
+      <if test="salt!=null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{user.userId,jdbcType=INTEGER} and identity_type = #{identityType,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sen.onlineexam.pojo.UserAuth">
+    update oe_user_auth
+    <set>
+      <if test="identifier!=null">
+        identifier = #{identifier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{user.userId,jdbcType=INTEGER} and identity_type = #{identityType,jdbcType=VARCHAR}
+  </update>
+</mapper>

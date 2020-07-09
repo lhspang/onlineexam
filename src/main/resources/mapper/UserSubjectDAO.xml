@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sen.onlineexam.dao.UserSubjectDAO">
+  <resultMap id="BaseResultMap" type="com.sen.onlineexam.pojo.UserSubject">
+    <association property="user" javaType="com.sen.onlineexam.pojo.User" column="user_id"
+                 select="com.sen.onlineexam.dao.UserDAO.selectByPrimaryKey"/>
+    <association property="subject" javaType="com.sen.onlineexam.pojo.Subject" column="subject_id"
+                 select="com.sen.onlineexam.dao.SubjectDAO.selectByPrimaryKey"/>
+  </resultMap>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select user_id, subject_id
+    from oe_user_subject
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="com.sen.onlineexam.pojo.UserSubject">
+    delete from oe_user_subject
+    where user_id = #{user.userId,jdbcType=INTEGER}
+      and subject_id = #{subject.subjectId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.sen.onlineexam.pojo.UserSubject">
+    insert into oe_user_subject (user_id, subject_id)
+    values (#{user.userId,jdbcType=INTEGER}, #{subject.subjectId,jdbcType=INTEGER})
+  </insert>
+
+
+</mapper>
