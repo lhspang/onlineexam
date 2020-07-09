@@ -22,8 +22,8 @@ public class QiniuPhoneServiceImpl implements QiniuPhoneService {
     @Override
     public boolean sentCode(String phone) {
         // 设置需要操作的账号的AK和SK
-        final String ACCESS_KEY = "4d2ILVvnJxp_rRf9d6evACyaAIelwT2eca4DVYT8";
-        final String SECRET_KEY = "PiFwwD1qDE5Wfs7uJIalrUv5I0jyRUsWiDDTEr9r";
+        final String ACCESS_KEY = "*";
+        final String SECRET_KEY = "*";
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 
         // 实例化一个SmsManager对象

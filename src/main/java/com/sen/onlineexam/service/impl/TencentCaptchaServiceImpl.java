@@ -18,7 +18,7 @@ public class TencentCaptchaServiceImpl implements TencentCaptchaService {
     public boolean captcha(String ticket, String userIp, String randstr) {
         try {
 
-            Credential cred = new Credential("AKIDrXTBiOnjenlVy4SSQ8aopa5dqoWyC3EA", "ytYx61hANKEtLYYJq6MYVFn7LJ5LYXHm");
+            Credential cred = new Credential("*", "*");
 
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setEndpoint("captcha.tencentcloudapi.com");
